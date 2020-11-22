@@ -33,4 +33,3 @@ result = cv.build_query(sort=sort_params).execute()
 
 result[0].id = commitId
 result[0].url = repoUrl + "/commit/" + commitId
-
