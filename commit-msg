@@ -1,0 +1,49 @@
+#!/usr/local/bin/python3
+import sys
+import os
+from notion.client import NotionClient
+from notion.block import PageBlock
+from notion.block import TextBlock
+from notion.block import ToggleBlock
+from notion.markdown import markdown_to_notion
+from datetime import datetime
+import notion.records
+
+# Build the content
+fileThatContainsChanges = open(sys.argv[1], "r")
+changes = fileThatContainsChanges.read().splitlines()
+changesLength = len(changes)
+
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+description = ""
+for changeIndex in range(changesLength):
+	tempDesc = ""
+	if changeIndex == 0 or not changes[changeIndex]:
+		continue
+	if changes[changeIndex] and changes[changeIndex][0] == "*":
+		tempDesc = changes[changeIndex][:1] + "&nbsp;" + changes[changeIndex][1:] + '\r'
+	else:
+		tempDesc = changes[changeIndex] + '\n'
+	description = description + tempDesc
+
+terminalStream = os.popen('git status -s')
+fileschanged = terminalStream.read()
+numberOfFilesChanged = len(fileschanged.splitlines())
+
+# Notion Section
+token_v2 = 'TOKEN'
+client = NotionClient(token_v2=token_v2)
+
+#Url of the commit table.
+url = "URL"
+cv = client.get_collection_view(url)
+
+row = cv.collection.add_row()
+row.title = changes[0]
+row.description = description
+
+block = client.get_block(row.id)
+block.children.add_new(TextBlock, title=description)
+toggle = block.children.add_new(ToggleBlock, title="__"+str(numberOfFilesChanged)+" File(s) changed__")
+toggle.children.add_new(TextBlock, title=fileschanged)

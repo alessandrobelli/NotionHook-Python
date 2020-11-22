@@ -1,0 +1,36 @@
+#!/usr/local/bin/python3
+import subprocess
+import sys, os
+from notion.client import NotionClient
+from notion.block import PageBlock
+from notion.block import TextBlock
+from notion.block import ToggleBlock
+
+def get_hash():
+	if len(sys.argv) > 1:
+		return sys.argv[1]
+	else:
+		return os.popen('git log head -n 1 --pretty=format:"%H"').read()
+
+commitId = get_hash();
+repoUrl = os.popen('git config --get remote.origin.url').read()
+
+#remove .git string
+repoUrl = repoUrl[:-5]
+
+# Notion Section
+token_v2 = 'TOKEN'
+client = NotionClient(token_v2=token_v2)
+
+#Url of the commit table.
+url = "URL"
+cv = client.get_collection_view(url)
+
+sort_params = [{
+    "created_time": "ascending"
+    }]
+result = cv.build_query(sort=sort_params).execute()
+
+result[0].id = commitId
+result[0].url = repoUrl + "/commit/" + commitId
+
