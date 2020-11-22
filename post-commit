@@ -27,9 +27,12 @@ url = "URL"
 cv = client.get_collection_view(url)
 
 sort_params = [{
-    "created_time": "ascending"
-    }]
+    "direction": "descending",
+    "property": "created_time",
+}]
+
 result = cv.build_query(sort=sort_params).execute()
 
 result[0].id = commitId
 result[0].url = repoUrl + "/commit/" + commitId
+
