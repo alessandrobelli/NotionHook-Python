@@ -37,11 +37,15 @@ client = NotionClient(token_v2=token_v2)
 
 #Url of the commit table.
 url = "URL"
-cv = client.get_collection_view(url)
+cv = client.get_collection_view(url, force_refresh=True)
+
+
 
 row = cv.collection.add_row()
 row.title = changes[0]
 row.description = description
+row.project = ['PROJECTNAME']
+
 
 block = client.get_block(row.id)
 block.children.add_new(TextBlock, title=description)
