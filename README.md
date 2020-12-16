@@ -2,6 +2,8 @@
 
 **A YOUTUBE EXPLANATION VIDEO WILL COME SOON!**
 
+**This script only works on macOS, I haven't been able to make it work on Windows.**
+
 These scripts uses [notion-py](https://github.com/jamalex/notion-py).
 
 With these files you can save in notion a backup of your commit messages, url and time.

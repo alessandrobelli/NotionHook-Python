@@ -100,11 +100,9 @@ changeInFile("post-commit",token,url,project)
 
 
 # Notion Section
-token_v2 = 'TOKEN'
-client = NotionClient(token_v2=token_v2)
+client = NotionClient(token_v2=token)
 
 #Url of the commit table.
-url = "URL"
 cv = client.get_collection_view(url)
 collection = cv.collection
 
