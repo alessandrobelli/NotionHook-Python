@@ -53,11 +53,11 @@ def changeInFile(fileName,token,url,project):
 def _find_prop_schema(schema, prop):
     return next((v for k, v in schema.items() if v["name"] == prop), None)
 
-def _add_new_multi_select_value(view, prop, value, color=None):
+def _add_new_multi_select_value(collection, prop, value, color=None):
     if color is None:
         color = choice(colors)
 
-    schema = view.get("schema")
+    schema = collection.get("schema")
     prop_schema = _find_prop_schema(schema,prop)
 
 
